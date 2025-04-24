@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import './App.css';
+import '../App.css';
 
-
-function CalibrationForm({ item, onClose, onSave }) 
-{
+export default function CalibrationForm({ onSave, item, onClose }) {
   const [formData, setFormData] = useState(() => ({
     codigo: item?.codigo || '',
     equipamento: item?.equipamento || '',
@@ -33,7 +31,9 @@ function CalibrationForm({ item, onClose, onSave })
     terminoGarantia: item?.terminoGarantia || '',
     calcularIncerteza: item?.calcularIncerteza || '',
   }));
-  
+
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,29 @@ function CalibrationForm({ item, onClose, onSave })
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+
+    if (!formData.codigo || !formData.equipamento || !formData.numeroSerie) {
+      setError('Preencha os campos obrigatórios: Código, Equipamento e Nº de Série');
+      setSuccess('');
+      return;
+    }
+
+    const novoEquipamento = {
+      codigo: formData.codigo,
+      equipamento: formData.equipamento,
+      numeroSerie: formData.numeroSerie,
+      ultimaCalibracao: new Date().toISOString().split('T')[0]
+    };
+
+    onSave(novoEquipamento);
+    setError('');
+    setSuccess('Dados salvos com sucesso!');
+
+    setTimeout(() => setSuccess(''), 3000);
+  };
+
+  const handleAddItem = (field) => {
+    alert(`Adicionar novo item para: ${field}`);
   };
 
   const renderInput = (label, name, type = "text", withAdd = false) => (
@@ -66,7 +88,6 @@ function CalibrationForm({ item, onClose, onSave })
             onChange={handleChange}
           />
         )}
-  
         {withAdd && (
           <button
             type="button"
@@ -80,17 +101,14 @@ function CalibrationForm({ item, onClose, onSave })
     </div>
   );
 
-  const handleAddItem = (field) => {
-    alert(`Adicionar novo item para: ${field}`);
-    // Aqui você pode abrir um modal, ou adicionar item via setState depois
-  };
-  
-
   return (
-    <div className="form-wrapper"> {/* <- Essa é a nova div que centraliza */}
+    <div className="form-wrapper">
+      {error && <div className="alert error">{error}</div>}
+      {success && <div className="alert success">{success}</div>}
+
       <form className="form-screen" onSubmit={handleSubmit}>
         <div className="header">CALIBRAÇÃO</div>
-  
+
         <div className="form-scroll">
           {renderInput('Código', 'codigo')}
           {renderInput('Equipamento', 'equipamento', 'select')}
@@ -120,16 +138,10 @@ function CalibrationForm({ item, onClose, onSave })
           {renderInput('Término da Garantia', 'terminoGarantia', 'date')}
           {renderInput('Calcular Incerteza', 'calcularIncerteza', 'select')}
         </div>
-  
-        <button type="submit" className="save-button">SALVAR</button>
-        <button type="button" className="save-button" onClick={onClose}>
-  Voltar
-</button>
 
+        <button type="submit" className="save-button">SALVAR</button>
+        <button type="button" className="save-button" onClick={onClose}>Voltar</button>
       </form>
     </div>
   );
-  
 }
-
-export default CalibrationForm;

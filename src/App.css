@@ -302,3 +302,43 @@ td:first-child {
   align-items: center;
   justify-content: center;
 }
+
+.alert {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.alert.error {
+  background-color: #ffe5e5;
+  color: #b20000;
+  border: 1px solid #ffaaaa;
+}
+
+.alert.success {
+  background-color: #e0ffe5;
+  color: #0a8000;
+  border: 1px solid #aaffaa;
+}
+
+.alert {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.alert.error {
+  background-color: #ffe5e5;
+  color: #b20000;
+  border: 1px solid #ffaaaa;
+}
+
+.alert.success {
+  background-color: #e0ffe5;
+  color: #0a8000;
+  border: 1px solid #aaffaa;
+}
